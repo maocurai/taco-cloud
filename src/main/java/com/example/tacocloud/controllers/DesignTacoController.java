@@ -34,25 +34,6 @@ public class DesignTacoController {
         this.designRepo = tacoRepository;
     }
 
-    @GetMapping
-    public String showDesignForm(Model model) {
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepository.findAll().forEach(ingredients::add);
-
-        Type[] types = Type.values();
-        for(Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredients, type));
-        }
-
-        model.addAttribute("design", new Taco());
-        return "design";
-    }
-
-    private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
-        return ingredients.stream().filter(x -> x.getType().equals(type)).collect(Collectors.toList());
-    }
-
     @ModelAttribute(name = "order")
     public Order order() {
         return new Order();
@@ -63,10 +44,29 @@ public class DesignTacoController {
         return new Taco();
     }
 
+    @GetMapping
+    public String showDesignForm(Model model) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepository.findAll().forEach(ingredients::add);
+
+        Type[] types = Type.values();
+        for(Type type : types) {
+            model.addAttribute(type.toString().toLowerCase(),
+                    filterByType(ingredients, type));
+        }
+        return "design";
+    }
+
+    private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
+        return ingredients.stream().filter(x -> x.getType().equals(type)).collect(Collectors.toList());
+    }
+
     @PostMapping()
-    public String processDesign(@Valid Taco design, Errors errors, Order order) {
+    public String processDesign(@Valid Taco design, Errors errors, @ModelAttribute Order order) {
+        System.out.println(design);
+        System.out.println(order);
         if(errors.hasErrors()) {
-            return "redirect:/design";
+            return "design";
         }
 
         Taco saved = designRepo.save(design);

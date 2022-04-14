@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @GetMapping("/current")
-    public String ordersForm(Model model) {
+    public String ordersForm() {
         return "orderForm";
     }
 
@@ -45,6 +45,4 @@ public class OrderController {
         log.info("Order submitted: " + order);
         return "redirect:/";
     }
-
-
 }

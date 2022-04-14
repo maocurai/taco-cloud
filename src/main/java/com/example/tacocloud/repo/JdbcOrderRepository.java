@@ -23,7 +23,7 @@ public class JdbcOrderRepository implements OrderRepository{
     @Autowired
     public JdbcOrderRepository(JdbcTemplate jdbc) {
         this.orderInserter = new SimpleJdbcInsert(jdbc)
-                .withTableName("Taco_order")
+                .withTableName("Taco_Order")
                 .usingGeneratedKeyColumns("id");
 
         this.orderTacoInserter = new SimpleJdbcInsert(jdbc)
@@ -34,6 +34,7 @@ public class JdbcOrderRepository implements OrderRepository{
 
     @Override
     public Order save(Order order) {
+        System.out.println(order);
         order.setPlacedAt(new Date());
         long orderId = saveOrderDetails(order);
         order.setId(orderId);
@@ -42,8 +43,8 @@ public class JdbcOrderRepository implements OrderRepository{
         return order;
     }
 
-//    @SuppressWarnings("unchecked");
     private long saveOrderDetails(Order order) {
+        @SuppressWarnings("unchecked")
         Map<String, Object> values  = objectMapper.convertValue(order, Map.class);
         values.put("placedAt", order.getPlacedAt());
         long orderId = orderInserter
