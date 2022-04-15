@@ -1,8 +1,9 @@
-package com.example.tacocloud.repo;
+package com.example.tacocloud.repo.jdbcImpl;
 
 
 import com.example.tacocloud.domain.Ingredient;
 import com.example.tacocloud.domain.Taco;
+import com.example.tacocloud.repo.TacoRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Repository
-public class JdbcTacoRepository implements TacoRepository {
+public class JdbcTacoRepository {
 
     private JdbcTemplate jdbc;
 
@@ -24,7 +25,6 @@ public class JdbcTacoRepository implements TacoRepository {
         this.jdbc = jdbc;
     }
 
-    @Override
     public Taco save(Taco taco) {
         long tacoId = saveTacoInfo(taco);
         taco.setId(tacoId);
